@@ -32,8 +32,6 @@ void setErrorInt(uint8 err) {
 }
 
 void setSendBytes(void) {
-  uint16 medVal[2];
-  
   GIE = 0;
   i2cSendBytes[0] = curRegister;
   
@@ -66,16 +64,13 @@ void setSendBytes(void) {
        break;
 
     case REG_WEIGHT:
-      
-      // to-do <<<<<<<<<
-      
-      i2cSendBytes[1] = (weight >> 8   );
-      i2cSendBytes[2] = (weight &  0xff);
+      i2cSendBytes[1] = (curCellReading >> 16);
+      i2cSendBytes[2] = (curCellReading >>  8) & 0xff;
+      i2cSendBytes[3] = (curCellReading      ) & 0xff;
       break;
-      
 
     case REG_SWITCHES:
-      i2cSendBytes[1] = ((JAM_PIN << 1) | RUN_OUT_PIN);
+      i2cSendBytes[1] = (JAM_PIN * 2) | RUN_OUT_PIN;
       break;
 
 
@@ -105,8 +100,10 @@ bool cmdLenIs(uint8 len) {
 // foreground code loop, never returns
 void eventLoop (void) {
   while(true) {
-    if(delayedError) handleDelayedError();
+    checkCell();
 
+    if(delayedError) handleDelayedError();
+    
     else if(haveCommand) {
       cmdLen        = i2cRecvBytes[0];
       uint8 cmdByte = i2cRecvBytes[1];

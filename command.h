@@ -26,7 +26,7 @@
 #define REG_CHIPID        20  // 10 bytes
 #define REG_ERROR         21  // 2 bytes
 //#define REG_SENS        22  // 5 bytes: temp sensors on power boARD
-#define REG_WEIGHT        23  // 3 bytes: cell load resing on cassette
+#define REG_WEIGHT        23  // 4 bytes: cell load reading on cassette (24-bit))
 #define REG_SWITCHES      24  // 2 bytes: run-out and jam switches on cassette
 
 #define REG_OPTIONS0      30  // 31 bytes

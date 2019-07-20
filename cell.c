@@ -17,10 +17,17 @@ void checkCell(void) {
       CELL_CLK_LAT = 1;
       bufIn <<= 1;;  // a little delay
       CELL_CLK_LAT = 0;
+      
+      if(CELL_DATA_PIN) {
+        CELL_DATA_TRIS = 1; // dummy for DEBUG
+      }
+      
       bufIn |= CELL_DATA_PIN;
     }
     GIE=0;
     curCellReading = bufIn;
+    // 25th pulse sets data return to default high
+    // and signals using chan A with gain 128
     CELL_CLK_LAT = 1; 
     GIE=1;
     CELL_CLK_LAT = 0;
